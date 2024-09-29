@@ -1,0 +1,6 @@
+.env
+viber_users.db
+viber.json
+.venv
+
+__pycache__
