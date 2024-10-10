@@ -1,3 +1,4 @@
+from time import time
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
 from viberbot.api.messages.data_types.location import Location
@@ -27,9 +28,14 @@ def main_menu_message(message, viber_request, viber):
     print(viber_request)
     print(message)
     viber.send_messages(viber_request.sender.id, [
-        PictureMessage(media=f'{expose_url}/static/cosmy.jpg'),
-        TextMessage(text="Вітаю🌷 На зв’язку Cosmy асистент 👱🏻‍♀️\nЧим можу бути тобі корисною?"),
-        KeyboardMessage(keyboard=main_keyboard, min_api_version=3)
+        PictureMessage(
+            media=f'{expose_url}/static/cosmy.jpg', 
+            min_api_version=6),
+    ])
+    viber.send_messages(viber_request.sender.id, [
+            TextMessage(
+            text="Вітаю🌷 На зв’язку Cosmy асистент 👱🏻‍♀️\nЧим можу бути тобі корисною?"),
+            KeyboardMessage(keyboard=main_keyboard, min_api_version=6)
     ])
     # viber.send_messages(viber_request.sender.id, [
     #     KeyboardMessage(keyboard=main_keyboard, min_api_version=3)
@@ -56,8 +62,11 @@ def send_rich_media_with_links(viber_request, viber):
 
 def send_contact_keyboard(viber_request, viber):
     viber.send_messages(viber_request.sender.id, [
-        TextMessage(text="Оберіть, що вас цікавить 👇🏻"),
-        KeyboardMessage(keyboard=contacts_keyboard),
+        TextMessage(
+            text="Оберіть, що вас цікавить 👇🏻",
+            keyboard=contacts_keyboard, 
+            min_api_version=6
+            ),
     ])
 
 def send_contacts(viber_request, viber):
@@ -65,10 +74,10 @@ def send_contacts(viber_request, viber):
         TextMessage(text="Наші контакти:\n\n🌃 м. Київ\nЛабораторний провулок 7, офіс 14\n\nТелефон:\n📞066 288 48 11\n📞073 317 54 43\n📞067 820 58 48\n\n" +
                     "📮 Електронна пошта: cosmy.com.ua@gmail.com\n\n" + 
                     "⌚️Час роботи:\nПн-Пт 9:00-18:00\nСб 10:00-18:00\nНд - Вихідний"
-                    
+        ,keyboard=map_keyboard,
+        min_api_version=6           
                 
         ),
-        KeyboardMessage(keyboard=map_keyboard),
     ])
 
 def send_location(viber_request, viber):
@@ -77,7 +86,7 @@ def send_location(viber_request, viber):
     # https://www.google.com/maps?q=50.42801141925601,30.52523747997809
     viber.send_messages(
         viber_request.sender.id, [
-            LocationMessage(location=location, keyboard=menu_keyboard)
+            LocationMessage(location=location, keyboard=menu_keyboard, min_api_version=6)
         ]
 
     )
@@ -85,10 +94,18 @@ def send_location(viber_request, viber):
 def settings_message(viber_request, viber):
     viber.send_messages(
         viber_request.sender.id, [
-            PictureMessage(media=f'{expose_url}/static/cosmy.jpg'),
+            PictureMessage(
+                media=f'{expose_url}/static/cosmy.jpg',
+            )]
+    )
+    viber.send_messages(
+        viber_request.sender.id, [
             TextMessage(
-                text="🔄 Бажаєте змінити номер телефону?", 
-                keyboard=settings_keyboard)
+                text="🔄 Бажаєте змінити номер телефону?"),
+            KeyboardMessage(
+                keyboard=settings_keyboard,
+                min_api_version=6
+            )
         ]
     )
 
@@ -96,8 +113,10 @@ def send_change_phone_number(viber_request, viber):
     viber.send_messages(
         viber_request.sender.id,
         [        
-            TextMessage(text="*Будь ласка, поділіться своїм номером телефону для авторизації.*"),
-            KeyboardMessage(keyboard=share_phone_keyboard, min_api_version=3),
+            TextMessage(
+                text="*Будь ласка, поділіться своїм номером телефону для авторизації.*",
+                keyboard=share_phone_keyboard, 
+                min_api_version=6),
         ]
     )
 
@@ -146,7 +165,9 @@ def send_order_data_to_user(viber_request, viber, order_details):
     viber_request.sender.id,
     [
         TextMessage(text=full_message,
-                    keyboard=main_keyboard)
+                    keyboard=main_keyboard,
+                    min_api_version=6
+                    )
     ]
     )
 
@@ -155,7 +176,7 @@ def send_no_orders(viber_request, viber):
         viber_request.sender.id,
         [
             TextMessage(text='*У вас ще не було замовлень, але це легко виправити 😉*',
-                        keyboard=no_orders_keyboard)
+                        keyboard=no_orders_keyboard, min_api_version=6)
         ]
     )
 

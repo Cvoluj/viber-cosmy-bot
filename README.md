@@ -20,5 +20,6 @@ API_TOKEN=<cosmy-api-token>
 }
 ```
 6. pip install -r requirements.txt
-7. run main.py
-8. `curl -# -i -g -H "X-Viber-Auth-Token:<paste_your_auth_token_here" -d @viber.json -X POST https://chatapi.viber.com/pa/set_webhook -v`
+7. python migrations.py
+8. python main.py
+9. `curl -# -i -g -H "X-Viber-Auth-Token:<paste_your_auth_token_here" -d @viber.json -X POST https://chatapi.viber.com/pa/set_webhook -v`

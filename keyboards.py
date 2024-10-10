@@ -1,17 +1,35 @@
-MAIN_KEYBOARD_BG_COLOR = "#A8DADC"
-CONTACT_KEYBOARD_BG_COLOR = "#A8DADC"
+BORDO_COLOR = "#7e2129"
+MILKY_COLOR = "#f4e9ea"
+WHITE_BORDER = "#ffffff"
 
+CONTACT_KEYBOARD_BG_COLOR = "#7e2129"
+
+
+def format_text_with_color(text, text_color=BORDO_COLOR, bold=True):
+    bold_open_tag = None
+    bold_close_tag = None
+    if bold:
+        bold_open_tag = '<b>'
+        bold_close_tag = '</b>'
+    return f'<font color="{text_color}">{bold_open_tag}{text}{bold_close_tag}</font>'
+
+frame = {
+    'BorderWidth': 3,
+    'BorderColor': WHITE_BORDER,
+    'CornerRadius': 10
+}
 
 information_button = {
     "Columns": 3,
     "Rows": 1,
-    "BgColor": MAIN_KEYBOARD_BG_COLOR,
+    "BgColor": MILKY_COLOR,
     "ActionType": "reply",
     "ActionBody": "Information",
-    "Text": "❓ Інформація",
+    "Text": format_text_with_color('❓ Інформація'),
     "TextSize": "large",
     "TextHAlign": "center",
-    "TextVAlign": "middle"
+    "TextVAlign": "middle",
+    "Frame": frame
 }
 
 menu_button = {
@@ -19,24 +37,26 @@ menu_button = {
     "Rows": 1,
     "ActionType": "reply",
     "ActionBody": "Menu",
-    "Text": "🔵 <b>Меню</b>",
+    "Text": format_text_with_color('🔵 Меню', text_color=MILKY_COLOR),
     "TextSize": "large",
     "TextVAlign": "middle",
     "TextHAlign": "center",
-    "BgColor": MAIN_KEYBOARD_BG_COLOR
+    "BgColor": BORDO_COLOR,
+    "Frame": frame
 }
 
 to_site_button = {
     "Columns": 6,
     "Rows": 1,
-    "BgColor": MAIN_KEYBOARD_BG_COLOR,
+    "BgColor": MILKY_COLOR,
     "ActionType": "open-url",
     "ActionBody": "https://cosmy.com.ua/",
-    "Text": "🔍 Перейти на сайт",
+    "Text": format_text_with_color('🔍 Перейти на сайт'),
     "Silent": True,
     "TextSize": "large",
     "TextHAlign": "center",
-    "TextVAlign": "middle"
+    "TextVAlign": "middle",
+    "Frame": frame
 }
 
 
@@ -45,17 +65,18 @@ share_phone_keyboard = {
     "DefaultHeight": False,
     "Buttons": [
         {
-            "Columns": 6,  # Збільшуємо кількість колонок, щоб кнопка займала ширше місце
-            "Rows": 1,  # Збільшуємо висоту кнопки
-            "BgColor": "#dddddd",  # Змінюємо колір фону на зелений для кращої видимості
+            "Columns": 6, 
+            "Rows": 1, 
+            "BgColor": MILKY_COLOR,
             "ActionType": "share-phone",
             "ActionBody": "Share phone number",
-            "Text": "📞 Share Phone Number",
+            "Text": format_text_with_color('📞 Share Phone Number'),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "TextOpacity": 100,  # Зробимо текст більш контрастним
-            "BgLoop": True  # Щоб кнопка виглядала однорідно на будь-якому фоні
+            "TextOpacity": 100, 
+            "BgLoop": True,
+            "Frame": frame
         }
     ],
 }
@@ -63,107 +84,117 @@ share_phone_keyboard = {
 main_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": True,
-    "BgColor": MAIN_KEYBOARD_BG_COLOR,  # Колір фону клавіатури
+    # "BgColor": MAIN_KEYBOARD_BG_COLOR, 
+    
     "Buttons": [
         {
             "Columns": 6,
             "Rows": 1,
-            "BgColor": MAIN_KEYBOARD_BG_COLOR,  # Колір кнопки
+            "BgColor": MILKY_COLOR, 
             "ActionType": "open-url",
             "ActionBody": "viber://chat?number=+380733175443",
-            "Text": "💪 Консультація",
+            "Text": format_text_with_color("💪 Консультація"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
+            
         },
         {
             "Columns": 6,
             "Rows": 1,
-            "BgColor": MAIN_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "reply",
             "ActionBody": "ContactCenter",
-            "Text": "📞 Контактний центр",
+            "Text": format_text_with_color("📞 Контактний центр"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         {
             "Columns": 6,
             "Rows": 1,
-            "BgColor": MAIN_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "reply",
             "ActionBody": "MyOrder",
-            "Text": "🎁 Моє замовлення",
+            "Text": format_text_with_color("🎁 Моє замовлення"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         {
             "Columns": 6,
             "Rows": 1,
-            "BgColor": MAIN_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "reply",
             "ActionBody": "OrderHistory",
-            "Text": "📄 Історія замовлень",
+            "Text": format_text_with_color("📄 Історія замовлень"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         to_site_button,
         information_button,
         {
             "Columns": 3,
             "Rows": 1,
-            "BgColor": MAIN_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "reply",
             "ActionBody": "Settings",
-            "Text": "⚙️ Налаштування",
+            "Text": format_text_with_color("⚙️ Налаштування"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
-        }
-    ]
+            "TextVAlign": "middle",
+            "Frame": frame
+        },
+        
+    ]    
 }
 
 
 contacts_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,
-    "BgColor": CONTACT_KEYBOARD_BG_COLOR,
     "Buttons": [
         {
             "Columns": 3,
             "Rows": 1,
-            "BgColor": CONTACT_KEYBOARD_BG_COLOR,  # Колір кнопки
+            "BgColor": MILKY_COLOR,
             "ActionType": "reply",
             "ActionBody": "Contacts",
-            "Text": "📞 Контакти",
+            "Text": format_text_with_color("📞 Контакти"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         information_button,
         {
             "Columns": 3,
             "Rows": 1,
-            "BgColor": CONTACT_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "open-url",
             "ActionBody": "https://www.instagram.com/cosmy/",
-            "Text": "📸 Інстаграм",
+            "Text": format_text_with_color("📸 Інстаграм"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         {
             "Columns": 3,
             "Rows": 1,
-            "BgColor": CONTACT_KEYBOARD_BG_COLOR,
+            "BgColor": MILKY_COLOR,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/",
-            "Text": "🔍 Наш сайт",
+            "Text": format_text_with_color("🔍 Наш сайт"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         menu_button,
     ]
@@ -173,18 +204,18 @@ contacts_keyboard = {
 map_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,
-    "BgColor": CONTACT_KEYBOARD_BG_COLOR,
     "Buttons": [
         {
             "Columns": 6,
             "Rows": 1,
-            "BgColor": CONTACT_KEYBOARD_BG_COLOR,  # Колір кнопки
+            "BgColor": MILKY_COLOR,  
             "ActionType": "reply",
             "ActionBody": "Map",
-            "Text": "🗺️ Переглянути карту",
+            "Text": format_text_with_color("🗺️ Переглянути карту"),
             "TextSize": "large",
             "TextHAlign": "center",
-            "TextVAlign": "middle"
+            "TextVAlign": "middle",
+            "Frame": frame
         },
         menu_button
     ]
@@ -193,7 +224,6 @@ map_keyboard = {
 menu_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,
-    "BgColor": CONTACT_KEYBOARD_BG_COLOR,
     "Buttons": [
         menu_button
     ]
@@ -203,18 +233,18 @@ menu_keyboard = {
 settings_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,
-    "BgColor": CONTACT_KEYBOARD_BG_COLOR,
     "Buttons": [
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "reply",
             "ActionBody": "ChangePhoneNumber",
-            "Text": "🔄 Змінити номер телефону",
+            "Text": format_text_with_color("🔄 Змінити номер телефону"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": CONTACT_KEYBOARD_BG_COLOR
+            "BgColor": MILKY_COLOR,
+            "Frame": frame
         },
         menu_button,
     ]
@@ -222,134 +252,170 @@ settings_keyboard = {
 
 rich_media_links_part1 = {
     "Type": "rich_media",
-    "ButtonsGroupColumns": 6,  # Ширина групи кнопок
-    "ButtonsGroupRows": 5,     # Висота групи кнопок
-    "BgColor": "#DDFFCC",      # Колір фону повідомлення
+    "ButtonsGroupColumns": 6,  
+    "ButtonsGroupRows": 5,     
+    "BgColor": WHITE_BORDER,      
     "Buttons": [
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/dostavka-i-oplata-ua",
-            "Text": "🚚 <b>Доставка і оплата</b>",
+            "Text": format_text_with_color("🚚 Доставка і оплата"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/cosmy-club-ua",
-            "Text": "🌟 <b>Космі клаб</b>",
+            "Text": format_text_with_color("🌟 Космі клаб"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/sertifikati-jakosti-ua",
-            "Text": "📃 <b>Сертифікати якості</b>",
+            "Text": format_text_with_color("📃 Сертифікати якості"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/podarochnie-sertifikati-ua",
-            "Text": "🎁 <b>Подарункові сертифікати</b>",
+            "Text": format_text_with_color("🎁 Подарункові сертифікати"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/pro-magazin-ua",
-            "Text": "❤️ <b>Наш космі</b>",
+            "Text": format_text_with_color("❤️ Наш космі"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
     ]
 }
 
 rich_media_links_part2 = {
     "Type": "rich_media",
-    "ButtonsGroupColumns": 6,  # Ширина групи кнопок
-    "ButtonsGroupRows": 4,     # Висота групи кнопок
-    "BgColor": "#DDFFCC",      # Колір фону повідомлення
+    "ButtonsGroupColumns": 6,  
+    "ButtonsGroupRows": 4,    
+    "BgColor": WHITE_BORDER,    
     "Buttons": [
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/povernennja-tovaru-ua",
-            "Text": "📄 <b>Політика конфіденційності</b>",
+            "Text": format_text_with_color("📄 Політика конфіденційності"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/umovi-zgodi-ua",
-            "Text": "🤝 <b>Публічна угода</b>",
+            "Text": format_text_with_color("🤝 Публічна угода"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
             "ActionBody": "https://cosmy.com.ua/blog-ua",
-            "Text": "📚 <b>Блог</b>",
+            "Text": format_text_with_color("📚 Блог"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
             "OpenURLType": "internal",
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         },
         {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "reply",
             "ActionBody": "Menu",
-            "Text": "🔵 <b>Меню</b>",
+            "Text": format_text_with_color("🔵 Меню"),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
-            "BgColor": "#E5F6DF",
+            "BgColor": MILKY_COLOR,
             "Silent": True,
+            "Frame": {
+                'BorderWidth': 1,
+                'BorderColor': WHITE_BORDER,
+            }
         }
     ]
 }

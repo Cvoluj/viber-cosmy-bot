@@ -69,7 +69,7 @@ def incoming():
                 viber.send_messages(viber_request.sender.id, [
                     TextMessage(text="Для авторизації,\nпідтвердіть свій номер телефону.\n Потрібно лише натиснути на кнопку ", 
                                     keyboard=share_phone_keyboard, 
-                                    min_api_version=3)
+                                    min_api_version=6)
             ])
 
 
@@ -80,6 +80,9 @@ def incoming():
     
     return Response(status=200)
 
-if __name__ == "__main__":
+def run_app():
     app.run(host='0.0.0.0', port=5000, debug=True, 
     )
+
+if __name__ == "__main__":
+    run_app()
