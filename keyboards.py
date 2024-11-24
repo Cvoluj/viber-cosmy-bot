@@ -446,7 +446,7 @@ next_page = {
 
 
 rich_media_indexing = {
-    "Type": "rich_media",
+    "Type": "keyboard",
     "ButtonsGroupColumns": 1,  
     "ButtonsGroupRows": 2,
     "Buttons": [
