@@ -423,7 +423,7 @@ rich_media_links_part2 = {
 no_orders_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,
-    "BgColor": CONTACT_KEYBOARD_BG_COLOR,
+    "BgColor": WHITE_BORDER,
     "Buttons": [
         to_site_button,
         menu_button
