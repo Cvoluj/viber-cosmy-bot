@@ -430,6 +430,18 @@ no_orders_keyboard = {
     ]
 }
 
+
+buttons_settings = {
+    "ActionType": "reply",
+    "BgColor": MILKY_COLOR,
+    "Text": format_text_with_color('>'),
+    "TextSize": "large",
+    "TextHAlign": "center",
+    "TextVAlign": "middle",
+    "Frame": frame
+}
+
+
 next_page = {
     "Columns": 1,
     "Rows": 1,

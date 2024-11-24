@@ -4,7 +4,7 @@ from viberbot.api.messages.data_types.location import Location
 
 
 from keyboards import main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
-    settings_keyboard, share_phone_keyboard, no_orders_keyboard, rich_media_indexing
+    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings
 from queries import add_user_to_db
 from settings import settings
 from queries import get_number_from_user_id
@@ -224,14 +224,38 @@ def show_order(viber_request, viber, orders_data, index):
     # if index < len(orders_data) - 1:
     #     nav_keyboard.add(types.InlineKeyboardButton(">", callback_data=f"next_order_{index}"))
 
+    next_page = {
+        "Columns": 3,
+        "Rows": 1,
+        "ActionBody": f"> {index + 1}",
+        **buttons_settings   
+    }
+        
+    prev_page = {
+        "Columns": 3,
+        "Rows": 1,
+        "ActionBody": f"< {index - 1}",
+        **buttons_settings,
+    }
+
+
+    keyboard_indexing = {
+        "Type": "keyboard",
+        "ButtonsGroupColumns": 1,  
+        "ButtonsGroupRows": 2,
+        "Buttons": [
+            prev_page,
+            next_page
+        ]
+    }
+
+
+
     viber.send_messages(viber_request.sender.id,
             [   
-                TextMessage(text=full_message, 
-                tracking_data=f"{index - 1}, {index + 1}"
-                    ),
+                TextMessage(text=full_message),
                 KeyboardMessage(
-                    keyboard=rich_media_indexing,
-                    tracking_data=index
+                    keyboard=keyboard_indexing
                 )
             ]
         )
