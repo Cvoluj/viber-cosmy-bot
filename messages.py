@@ -230,7 +230,7 @@ def show_order(viber_request, viber, orders_data, index):
                 RichMediaMessage(
                     rich_media=rich_media_indexing,
                     min_api_version=6,
-                    tracking_data=f"next_page_{index + 1}"
+                    tracking_data=index
                 )
             ]
         )

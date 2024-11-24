@@ -59,16 +59,12 @@ def incoming():
                         send_my_order_message(viber_request, viber)
                     case "OrderHistory":
                         send_order_history(viber_request, viber)
+                    case "<", ">":
+                        send_order_history(viber_request, viber, index=int(message.tracking_data))
                     case _ if "https://" in message.text:
                         pass
                     case str():
                         main_menu_message(message, viber_request, viber)
-                    
-                match message.tracking_data:
-                    case tracking_data if tracking_data.startswith('next_page'):
-                        send_order_history(viber_request, viber, index=1)
-                    case _:
-                        pass
 
             
                 
