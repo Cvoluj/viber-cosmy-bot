@@ -225,7 +225,7 @@ def show_order(viber_request, viber, orders_data, index):
     #     nav_keyboard.add(types.InlineKeyboardButton(">", callback_data=f"next_order_{index}"))
 
     next_page = {
-        "Columns": 2,
+        "Columns": 3,
         "Rows": 1,
         "Text": format_text_with_color('❯'),
         "ActionBody": f"> {index + 1}",
@@ -233,7 +233,7 @@ def show_order(viber_request, viber, orders_data, index):
     }
         
     prev_page = {
-        "Columns": 2,
+        "Columns": 3,
         "Rows": 1,
         "Text": format_text_with_color('❮'),
         "ActionBody": f"< {index - 1}",
