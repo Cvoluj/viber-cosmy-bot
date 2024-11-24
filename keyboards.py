@@ -432,7 +432,7 @@ no_orders_keyboard = {
 
 
 buttons_settings = {
-    "ActionType": "reply",
+    "ActionType": "",
     "BgColor": MILKY_COLOR,
     "TextSize": "large",
     "TextHAlign": "center",
