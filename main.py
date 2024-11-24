@@ -63,7 +63,11 @@ def incoming():
                         pass
                     case str():
                         main_menu_message(message, viber_request, viber)
-                      
+                    
+                match message.tracking_data:
+                    case tracking_data if tracking_data.startswith('next_page'):
+                        send_order_history(viber_request, viber, index=1)
+
             
                 
             else:

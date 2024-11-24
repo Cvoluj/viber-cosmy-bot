@@ -4,7 +4,7 @@ from viberbot.api.messages.data_types.location import Location
 
 
 from keyboards import main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
-    settings_keyboard, share_phone_keyboard, no_orders_keyboard
+    settings_keyboard, share_phone_keyboard, no_orders_keyboard, rich_media_indexing
 from queries import add_user_to_db
 from settings import settings
 from queries import get_number_from_user_id
@@ -178,7 +178,7 @@ def send_no_orders(viber_request, viber):
         ]
     )
 
-def send_order_history(viber_request, viber):
+def send_order_history(viber_request, viber, index=0):
     if not settings.cosmy_api_token:
         viber.send_messages(
             viber_request.sender.id,
@@ -203,7 +203,7 @@ def send_order_history(viber_request, viber):
         send_no_orders(viber_request, viber)
         return
     
-    show_order(viber_request, viber, orders_data, 0)
+    show_order(viber_request, viber, orders_data, index)
     
     
 def show_order(viber_request, viber, orders_data, index):
@@ -226,6 +226,11 @@ def show_order(viber_request, viber, orders_data, index):
 
     viber.send_messages(viber_request.sender.id,
             [   
-                TextMessage(text=full_message)
+                TextMessage(text=full_message),
+                RichMediaMessage(
+                    rich_media=rich_media_indexing,
+                    min_api_version=6,
+                    tracking_data=f"next_page_{index + 1}"
+                )
             ]
         )

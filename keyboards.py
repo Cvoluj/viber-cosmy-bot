@@ -429,3 +429,28 @@ no_orders_keyboard = {
         menu_button
     ]
 }
+
+next_page = {
+    "Columns": 1,
+    "Rows": 1,
+    "BgColor": MILKY_COLOR,
+    "ActionType": "reply",
+    "ActionBody": "next_page",
+    "Text": format_text_with_color('>'),
+    "TextSize": "large",
+    "TextHAlign": "center",
+    "TextVAlign": "middle",
+    "Frame": frame
+
+}
+
+
+rich_media_indexing = {
+    "Type": "rich_media",
+    "ButtonsGroupColumns": 1,  
+    "ButtonsGroupRows": 2,
+    "Buttons": {
+        next_page,
+        next_page
+    }    
+}
