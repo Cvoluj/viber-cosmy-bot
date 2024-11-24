@@ -449,8 +449,8 @@ rich_media_indexing = {
     "Type": "rich_media",
     "ButtonsGroupColumns": 1,  
     "ButtonsGroupRows": 2,
-    "Buttons": {
+    "Buttons": [
         next_page,
         next_page
-    }    
+    ]
 }
