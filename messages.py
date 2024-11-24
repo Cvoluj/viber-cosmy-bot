@@ -4,7 +4,7 @@ from viberbot.api.messages.data_types.location import Location
 
 
 from keyboards import format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
-    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings
+    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button
 from queries import add_user_to_db
 from settings import settings
 from queries import get_number_from_user_id
@@ -247,7 +247,8 @@ def show_order(viber_request, viber, orders_data, index):
         "ButtonsGroupRows": 2,
         "Buttons": [
             prev_page,
-            next_page
+            next_page,
+            menu_button
         ]
     }
 
