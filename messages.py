@@ -144,11 +144,11 @@ def send_my_order_message(viber_request, viber):
         return
     
     order = order_data.get('order')
-    if order and order.get('order_status') in ["В очікуванні", "В дорозі"]:
-        order_details = format_order_data(order_data)
-        send_order_data_to_user(viber_request, viber, order_details)
-    else:
-        send_no_orders(viber_request, viber)
+    # if order and order.get('order_status') in ["В очікуванні", "В дорозі"]:
+    order_details = format_order_data(order_data)
+    send_order_data_to_user(viber_request, viber, order_details)
+    # else:
+        # send_no_orders(viber_request, viber)
 
 
 def send_order_data_to_user(viber_request, viber, order_details):
@@ -199,7 +199,7 @@ def send_order_history(viber_request, viber):
 
     orders_data = get_all_last_orders_by_telephone(number)
 
-    if not orders_data or not isinstance(orders_data, list) or len(orders_data) == 0:
+    if not orders_data or len(orders_data) == 0:
         send_no_orders(viber_request, viber)
         return
     
