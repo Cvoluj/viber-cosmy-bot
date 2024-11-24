@@ -205,9 +205,12 @@ def send_order_history(viber_request, viber):
     
     show_order(viber_request, viber, orders_data, 0)
     
-
+    
 def show_order(viber_request, viber, orders_data, index):
-    order = orders_data[index]
+    orders = orders_data.get("orders")
+    orders_keys = [*orders.keys()]
+    order = orders.get(orders_keys[index])
+
     order_details = format_order_data({'order': order})
 
     response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key != "Товари у замовленні"])
@@ -217,13 +220,12 @@ def show_order(viber_request, viber, orders_data, index):
     # Navigation buttons
     # if index > 0:
     #     nav_keyboard.add(types.InlineKeyboardButton("<", callback_data=f"prev_order_{index}"))
-    # nav_keyboard.add(types.InlineKeyboardButton("Меню", callback_data="main_menu"))
+    # nav_keuyboard.add(types.InlineKeyboardButton("Меню", callback_data="main_menu"))
     # if index < len(orders_data) - 1:
     #     nav_keyboard.add(types.InlineKeyboardButton(">", callback_data=f"next_order_{index}"))
 
     viber.send_messages(viber_request.sender.id,
-            [
+            [   
                 TextMessage(text=full_message)
             ]
         )
-    
