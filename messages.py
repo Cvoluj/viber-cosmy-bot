@@ -203,7 +203,7 @@ def send_order_history(viber_request, viber):
         send_no_orders(viber_request, viber)
         return
     
-    show_order(viber_request, viber, orders_data)
+    show_order(viber_request, viber, orders_data, 0)
     
 
 def show_order(viber_request, viber, orders_data, index):
