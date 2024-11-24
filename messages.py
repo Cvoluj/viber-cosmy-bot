@@ -3,7 +3,7 @@ from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMess
 from viberbot.api.messages.data_types.location import Location
 
 
-from keyboards import main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
+from keyboards import format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
     settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings
 from queries import add_user_to_db
 from settings import settings
@@ -227,6 +227,7 @@ def show_order(viber_request, viber, orders_data, index):
     next_page = {
         "Columns": 3,
         "Rows": 1,
+        "Text": format_text_with_color('>'),
         "ActionBody": f"> {index + 1}",
         **buttons_settings   
     }
@@ -234,6 +235,7 @@ def show_order(viber_request, viber, orders_data, index):
     prev_page = {
         "Columns": 3,
         "Rows": 1,
+        "Text": format_text_with_color('<'),
         "ActionBody": f"< {index - 1}",
         **buttons_settings,
     }
