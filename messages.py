@@ -139,7 +139,7 @@ def send_my_order_message(viber_request, viber):
 
     order_data = get_last_order_by_telephone(number)
     print(order_data)
-    if order_data is None or (isinstance(order_data, dict) and 'order' not in order_data):
+    if order_data is None or 'order' not in order_data.keys():
         send_no_orders(viber_request, viber)
         return
     
