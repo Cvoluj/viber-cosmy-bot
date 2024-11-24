@@ -8,7 +8,7 @@ headers = {
 
 
 
-def get_all_last_orders_by_telephone(api_token, telephone):
+def get_all_last_orders_by_telephone(telephone):
     try:
         if not settings.cosmy_api_token:
             raise ValueError("COSMY_API_TOKEN is None, could't use api") 
