@@ -437,5 +437,6 @@ buttons_settings = {
     "TextSize": "large",
     "TextHAlign": "center",
     "TextVAlign": "middle",
+    "Silent": True,
     "Frame": frame
 }
