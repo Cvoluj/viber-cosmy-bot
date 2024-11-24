@@ -226,7 +226,7 @@ def show_order(viber_request, viber, orders_data, index):
 
     viber.send_messages(viber_request.sender.id,
             [   
-                TextMessage(text=full_message),
+                TextMessage(text=full_message, tracking_data=(index - 1, index + 1)),
                 KeyboardMessage(
                     keyboard=rich_media_indexing,
                     tracking_data=index
