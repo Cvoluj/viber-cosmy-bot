@@ -1,4 +1,3 @@
-from time import time
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
 from viberbot.api.messages.data_types.location import Location
@@ -8,9 +7,9 @@ from keyboards import main_keyboard, rich_media_links_part2, rich_media_links_pa
     settings_keyboard, share_phone_keyboard, no_orders_keyboard
 from queries import add_user_to_db
 from settings import settings
-from cosmyapi import login, get_all_last_orders_by_telephone, get_last_order_by_telephone, format_order_data
 from queries import get_number_from_user_id
-
+from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
+from utils import format_order_data
 
 expose_url = settings.expose_url
 
@@ -121,8 +120,7 @@ def send_change_phone_number(viber_request, viber):
     )
 
 def send_my_order_message(viber_request, viber):
-    api_token = login()
-    if not api_token:
+    if not settings.cosmy_api_token:
         viber.send_messages(viber_request.sender.id,
             [
                 TextMessage(text="Помилка при логіні. Спробуйте ще раз")
@@ -139,7 +137,7 @@ def send_my_order_message(viber_request, viber):
         )
         return
 
-    order_data = get_last_order_by_telephone(api_token, number)
+    order_data = get_last_order_by_telephone(number)
 
     if order_data is None or (isinstance(order_data, dict) and 'order' not in order_data):
         send_no_orders(viber_request, viber)
@@ -181,8 +179,7 @@ def send_no_orders(viber_request, viber):
     )
 
 def send_order_history(viber_request, viber):
-    api_token = login()
-    if not api_token:
+    if not settings.cosmy_api_token:
         viber.send_messages(
             viber_request.sender.id,
             [
@@ -200,7 +197,7 @@ def send_order_history(viber_request, viber):
         )
         return
 
-    orders_data = get_all_last_orders_by_telephone(api_token, number)
+    orders_data = get_all_last_orders_by_telephone(number)
 
     if not orders_data or not isinstance(orders_data, list) or len(orders_data) == 0:
         send_no_orders(viber_request, viber)

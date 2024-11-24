@@ -1,0 +1,2 @@
+from .get_all_orders_by_telephone import get_all_last_orders_by_telephone
+from .get_last_order_by_telephone import get_last_order_by_telephone

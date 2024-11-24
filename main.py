@@ -6,10 +6,10 @@ from viberbot.api.messages import ContactMessage
 
 
 from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest
+from api.startup_login import startup_login
 from keyboards import share_phone_keyboard
 from messages import main_menu_message, contact_recived_message, send_rich_media_with_links, conversation_started_message, \
-    send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, \
-    send_order_history
+    send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, send_order_history
 from queries import get_number_from_user_id
 
 from settings import settings
@@ -20,6 +20,7 @@ viber = Api(BotConfiguration(
     avatar=' ',
     auth_token=settings.auth_token
 ))
+startup_login()
 
 
 

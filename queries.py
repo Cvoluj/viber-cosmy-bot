@@ -22,8 +22,12 @@ def get_number_from_user_id(user_id):
         result = cursor.fetchone()
 
         if result:
-            return result[0]
+            return result[0][2:]
         else:
             return None
     finally:
         conn.close()
+
+
+if __name__ == "__main__":
+    print(get_number_from_user_id("2Tln9NcxXDho6zX8h4rjpw=="))
