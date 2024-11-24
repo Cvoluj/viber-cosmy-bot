@@ -243,8 +243,8 @@ def show_order(viber_request, viber, orders_data, index):
 
     keyboard_indexing = {
         "Type": "keyboard",
-        "ButtonsGroupColumns": 4,  
-        "ButtonsGroupRows": 2,
+        "ButtonsGroupColumns": 6,  
+        "ButtonsGroupRows": 6,
         "BgColor": WHITE_BORDER,
         "Buttons": [
             prev_page,
