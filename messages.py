@@ -260,3 +260,4 @@ def show_order(viber_request, viber, orders_data, index):
                 TextMessage(text=full_message, keyboard=keyboard_indexing, min_api_version=6),
             ]
         )
+    return
