@@ -11,7 +11,7 @@ def format_text_with_color(text, text_color=BORDO_COLOR, bold=True):
     if bold:
         bold_open_tag = '<b>'
         bold_close_tag = '</b>'
-    return f'<font color="{text_color}"><p>{bold_open_tag}{text}{bold_close_tag}</p></font>'
+    return f'<font color="{text_color}">{bold_open_tag}{text}{bold_close_tag}</font>'
 
 frame = {
     'BorderWidth': 3,
