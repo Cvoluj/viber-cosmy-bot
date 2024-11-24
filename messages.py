@@ -144,11 +144,11 @@ def send_my_order_message(viber_request, viber):
         return
     
     order = order_data.get('order')
-    # if order and order.get('order_status') in ["В очікуванні", "В дорозі"]:
-    order_details = format_order_data(order_data)
-    send_order_data_to_user(viber_request, viber, order_details)
-    # else:
-        # send_no_orders(viber_request, viber)
+    if order and order.get('order_status') in ["В очікуванні", "В дорозі"]:
+        order_details = format_order_data(order_data)
+        send_order_data_to_user(viber_request, viber, order_details)
+    else:
+        send_no_orders(viber_request, viber)
 
 
 def send_order_data_to_user(viber_request, viber, order_details):
@@ -217,13 +217,6 @@ def show_order(viber_request, viber, orders_data, index):
     response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key != "Товари у замовленні"])
     products_message = "Товари у замовленні:\n" + "\n".join(order_details["Товари у замовленні"])
     full_message = f"{response_message}\n\n{products_message}"
-
-    # Navigation buttons
-    # if index > 0:
-    #     nav_keyboard.add(types.InlineKeyboardButton("<", callback_data=f"prev_order_{index}"))
-    # nav_keuyboard.add(types.InlineKeyboardButton("Меню", callback_data="main_menu"))
-    # if index < len(orders_data) - 1:
-    #     nav_keyboard.add(types.InlineKeyboardButton(">", callback_data=f"next_order_{index}"))
 
     next_page = {
         "Columns": 3,
