@@ -235,7 +235,7 @@ def show_order(viber_request, viber, orders_data, index):
     prev_page = {
         "Columns": 3,
         "Rows": 1,
-        "Text": format_text_with_color('\003C'),
+        "Text": format_text_with_color('\u003C'),
         "ActionBody": f"< {index - 1}",
         **buttons_settings,
     }
