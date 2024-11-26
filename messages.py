@@ -274,9 +274,7 @@ def send_broadcast(viber_request, viber):
 def send_broadcast_message(batch, headers):
     for users in batch:
         payload = {
-            "broadcast_list": [
-                users,
-            ],
+            "broadcast_list": users,
             "type": "text",
             "text": "Hello! This is a broadcast message from our bot."
         }
