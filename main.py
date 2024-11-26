@@ -65,6 +65,7 @@ def incoming():
                     case _ if "https://" or "viber://chat?number=" in message.text:
                         pass
                     case "broadcast":
+                        print("called")
                         send_broadcast(viber_request, viber)
                     case str():
                         main_menu_message(message, viber_request, viber)
