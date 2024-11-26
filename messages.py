@@ -271,7 +271,7 @@ def send_broadcast(viber_request, viber):
     batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers))
     batch_thread.start()
 
-def send_broadcast_message(batch, headers, template_payload):
+def send_broadcast_message(batch, headers):
     for users in batch:
         payload = {
             "broadcast_list": [
