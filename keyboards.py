@@ -441,3 +441,25 @@ buttons_settings = {
     "Silent": True,
     "Frame": frame
 }
+
+
+admin_keyboard = {
+    "Type": "keyboard",
+    "DefaultHeight": False,
+    "Buttons": [
+        {
+            "Columns": 6,
+            "Rows": 1,
+            "BgColor": MILKY_COLOR,  
+            "ActionType": "reply",
+            "ActionBody": "Broadcast",
+            "Text": format_text_with_color("📢 Розсилка!"),
+            "TextSize": "large",
+            "TextHAlign": "center",
+            "TextVAlign": "middle",
+            "Frame": frame,
+            "Silent": True
+        },
+        menu_button
+    ]
+}

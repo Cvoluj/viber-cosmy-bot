@@ -28,6 +28,21 @@ def get_number_from_user_id(user_id):
     finally:
         conn.close()
 
+def get_is_admin_from_user_id(user_id):
+    conn = sqlite3.connect('viber_users.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT is_admin FROM user WHERE user_id = ?', (user_id,))
+        result = cursor.fetchone()
+
+        if result:
+            return result[0]
+        else:
+            return None
+    finally:
+        conn.close()
+
 def get_user_ids():
     conn = sqlite3.connect('viber_users.db')
     cursor = conn.cursor()
@@ -43,6 +58,20 @@ def get_user_ids():
     finally:
         conn.close()
 
+def give_admin_rules(user_id):
+    conn = sqlite3.connect('viber_users.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('UPDATE user SET is_admin=1 WHERE user_id = ?', (user_id,))
+        conn.commit()
+
+        cursor.execute('SELECT is_admin FROM user WHERE user_id = ?', (user_id,))
+        is_admin = cursor.fetchone()
+
+        return is_admin
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     print(get_number_from_user_id("2Tln9NcxXDho6zX8h4rjpw=="))

@@ -1,14 +1,15 @@
+from dataclasses import dataclass
 import threading
 import time
 import requests
 from viberbot.api.messages.text_message import TextMessage
-from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
+from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, VideoMessage
 from viberbot.api.messages.data_types.location import Location
 
 
 from keyboards import WHITE_BORDER, format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
-    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button
-from queries import add_user_to_db, get_user_ids
+    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button, admin_keyboard
+from queries import add_user_to_db, get_is_admin_from_user_id, get_user_ids, give_admin_rules
 from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
@@ -32,7 +33,7 @@ def main_menu_message(message, viber_request, viber):
     print(message)
     viber.send_messages(viber_request.sender.id, [
         PictureMessage(
-            media=f'{expose_url}/static/cosmy.jpg', 
+            media="https://dl-media.viber.com/5/media/2/short/any/sig/image/0x0/de92/c63b057a7deaafaf414a4114e0e283dc300183cd6f11e9f37b4f691eb57fde92.jpg?Expires=1732657826&Signature=u1RXSVQn3aSjn6ekSPQ446KdpoijL-aOlxocI2vFWl4knUCX9rvPr13jeRG64kTTHkzMlwWl4ZaQRQPNLCUZtWhXv9FOyP35aLgewGfXwXMFs7Ro13ksG0u9GEXOMlgEloB-vtLAcRUm4lEua-VcPoATaqqbGRpYyjU4OiDnAkf-bgSG-oo2wrH~ZpxRF5TI62P9p-TpnuPILWCAYziSYXfCl8zusZ8MWrW096mSX1GAK7VxZlrbO0oJKJl~OvIxOpjtAY3MifVoozy0o2IH4MBf0IOF5DIcJxkdjyMdZ52Ghcf0rwKKAHhHYZI8Qz0-rVx6EDp1q5WamP1iV0DtNQ__&Key-Pair-Id=APKAJ62UNSBCMEIPV4HA", 
             min_api_version=6),
     ])
     viber.send_messages(viber_request.sender.id, [
@@ -260,23 +261,80 @@ def show_order(viber_request, viber, orders_data, index):
         )
     return
 
-def send_broadcast(viber_request, viber):
+def greet_new_admin(viber_request, viber):
+    is_admin = give_admin_rules(viber_request.sender.id)
+
+    if is_admin[0] == 1:
+        viber.send_messages(viber_request.sender.id,
+            [
+                TextMessage(text="Вітаємо, у вас тепер права адміністратора, ви можете надсилати відео!")
+            ]
+        )
+
+    return
+
+def send_admin_keyboard(viber_request, viber):
+    is_admin = get_is_admin_from_user_id(viber_request.sender.id)
+
+    if is_admin != 1:
+        main_menu_message("Not admin", viber_request, viber)
+        return
+    
+    viber.send_messages(
+        viber_request.sender.id,
+        [
+            TextMessage(text="Адмін панель", keyboard=..., min_api_version=6)
+        ]
+    )
+
+
+@dataclass
+class Broadcast:
+    func: PictureMessage | VideoMessage
+    kwargs: dict[str | None]
+    thumbnail: str | None
+    media: str | None
+    type: str
+
+
+
+def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
+    if '/image/' in media_url:
+        func = PictureMessage
+        kwargs = {}
+        type = "picture"
+    if '/video/' in media_url:
+        func = VideoMessage
+        kwargs = {"size":1, "duration": 180}
+        type = "video"
+
+    viber.send_messages(
+        viber_request.sender.id,
+        [
+            func(text=thumbnail, min_api_version=6, media=media_url, **kwargs, keyboard=admin_keyboard)
+        ]
+    )
+    return Broadcast(func=func, kwargs=kwargs, thumbnail=thumbnail, media=media_url, type=type)
+
+
+def send_broadcast(viber_request, viber, broadcast: Broadcast):
     headers = {
         "X-Viber-Auth-Token": settings.auth_token,
         "Content-Type": "application/json"
     }
     user_ids = get_user_ids()
-    user_ids = ["2Tln9NcxXDho6zX8h4rjpw=="]
-    user_ids_batches = split_on_batches(user_ids, 1)
-    batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers))
+    user_ids_batches = split_on_batches(user_ids, 300)
+    batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers, broadcast))
     batch_thread.start()
 
-def send_broadcast_message(batch, headers):
+def send_broadcast_message(batch, headers, broadcast: Broadcast):
     for users in batch:
         payload = {
             "broadcast_list": users,
-            "type": "text",
-            "text": "Hello! This is a broadcast message from our bot."
+            "text": broadcast.thumbnail,
+            "media": broadcast.media,
+            "type":broadcast.type,
+            **broadcast.kwargs,
         }
 
         try:
