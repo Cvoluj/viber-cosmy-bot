@@ -97,6 +97,7 @@ main_keyboard = {
             "TextSize": "large",
             "TextHAlign": "center",
             "TextVAlign": "middle",
+            "Silent": True,
             "Frame": frame
             
         },

@@ -62,7 +62,7 @@ def incoming():
                     case _ if message.text.startswith("<") or message.text.startswith(">"):
                         print("CALLED")
                         send_order_history(viber_request, viber, index=int(message.text.split(" ")[-1]))
-                    case _ if "https://" in message.text:
+                    case _ if "https://" or "viber://chat?number=" in message.text:
                         pass
                     case str():
                         main_menu_message(message, viber_request, viber)
