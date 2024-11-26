@@ -1,3 +1,5 @@
+import threading
+import time
 import requests
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
@@ -6,13 +8,14 @@ from viberbot.api.messages.data_types.location import Location
 
 from keyboards import WHITE_BORDER, format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
     settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button
-from queries import add_user_to_db
+from queries import add_user_to_db, get_user_ids
 from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
-from utils import format_order_data
+from utils import format_order_data, split_on_batches
 
 expose_url = settings.expose_url
+VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
 
 
 def conversation_started_message(viber, viber_request):
@@ -258,20 +261,28 @@ def show_order(viber_request, viber, orders_data, index):
     return
 
 def send_broadcast(viber_request, viber):
-    VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
-
     headers = {
         "X-Viber-Auth-Token": settings.auth_token,
         "Content-Type": "application/json"
     }
+    
+    user_ids_batches = split_on_batches(get_user_ids()[:1], 1)
+    batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers))
+    batch_thread.start()
 
-    payload = {
-        "broadcast_list": [
-            "",
-        ],
-        "type": "text",
-        "text": "Hello! This is a broadcast message from our bot."
-    }
+def send_broadcast_message(batch, headers, template_payload):
+    for users in batch:
+        payload = {
+            "broadcast_list": [
+                users,
+            ],
+            "type": "text",
+            "text": "Hello! This is a broadcast message from our bot."
+        }
 
-    # Send the broadcast request
-    response = requests.post(VIBER_BROADCAST_URL, json=payload, headers=headers)
+        try:
+            response = requests.post(VIBER_BROADCAST_URL, json=payload, headers=headers)
+            print(f"Sent batch: {users}, Response: {response.status_code}, {response.text}")
+        except requests.RequestException as e:
+            print(f"Error sending batch: {users}, Error: {e}")
+        time.sleep(11)

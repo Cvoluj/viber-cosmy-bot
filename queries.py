@@ -28,6 +28,23 @@ def get_number_from_user_id(user_id):
     finally:
         conn.close()
 
+def get_user_ids():
+    conn = sqlite3.connect('viber_users.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT user_id FROM user')
+        results = cursor.fetchall()
+
+        if results:
+            return [result[0] for result in results]
+        else:
+            return None
+    finally:
+        conn.close()
+
 
 if __name__ == "__main__":
     print(get_number_from_user_id("2Tln9NcxXDho6zX8h4rjpw=="))
+    print(get_user_ids())
+    

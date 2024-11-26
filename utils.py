@@ -1,3 +1,4 @@
+from math import ceil
 
 
 def format_order_data(order_data):
@@ -16,3 +17,7 @@ def format_order_data(order_data):
         ]
     }
     return details
+
+
+def split_on_batches(list_to_split: list, batch: int):
+    return [list_to_split[i:i + batch] for i in range(0, len(list_to_split), batch)]
