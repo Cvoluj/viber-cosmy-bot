@@ -265,8 +265,9 @@ def send_broadcast(viber_request, viber):
         "X-Viber-Auth-Token": settings.auth_token,
         "Content-Type": "application/json"
     }
-    
-    user_ids_batches = split_on_batches(get_user_ids()[:1], 1)
+    user_ids = get_user_ids()
+    user_ids = ["2Tln9NcxXDho6zX8h4rjpw=="]
+    user_ids_batches = split_on_batches(user_ids, 1)
     batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers))
     batch_thread.start()
 
