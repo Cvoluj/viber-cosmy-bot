@@ -59,14 +59,14 @@ def incoming():
                         send_my_order_message(viber_request, viber)
                     case "OrderHistory":
                         send_order_history(viber_request, viber)
+                    case "broadcast":
+                        print("called")
+                        send_broadcast(viber_request, viber)
                     case _ if message.text.startswith("<") or message.text.startswith(">"):
                         print("CALLED")
                         send_order_history(viber_request, viber, index=int(message.text.split(" ")[-1]))
                     case _ if "https://" or "viber://chat?number=" in message.text:
                         pass
-                    case _ if message.text == "broadcast":
-                        print("called")
-                        send_broadcast(viber_request, viber)
                     case str():
                         main_menu_message(message, viber_request, viber)
 
