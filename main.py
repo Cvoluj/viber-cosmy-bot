@@ -64,7 +64,7 @@ def incoming():
                         send_order_history(viber_request, viber, index=int(message.text.split(" ")[-1]))
                     case _ if "https://" or "viber://chat?number=" in message.text:
                         pass
-                    case "broadcast":
+                    case _ if message.text == "broadcast":
                         print("called")
                         send_broadcast(viber_request, viber)
                     case str():
