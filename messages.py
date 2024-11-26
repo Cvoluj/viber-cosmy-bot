@@ -1,5 +1,6 @@
+import requests
 from viberbot.api.messages.text_message import TextMessage
-from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
+from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, 
 from viberbot.api.messages.data_types.location import Location
 
 
@@ -255,3 +256,22 @@ def show_order(viber_request, viber, orders_data, index):
             ]
         )
     return
+
+def send_broadcast(viber_request, viber):
+    VIBER_BROADCAST_URL = https://chatapi.viber.com/pa/broadcast_message
+
+    headers = {
+        "X-Viber-Auth-Token": settings.auth_token,
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "broadcast_list": [
+            ""
+        ],
+        "type": "text",
+        "text": "Hello! This is a broadcast message from our bot."
+    }
+
+    # Send the broadcast request
+    response = requests.post(VIBER_BROADCAST_URL, json=payload, headers=headers)
