@@ -258,7 +258,7 @@ def show_order(viber_request, viber, orders_data, index):
     return
 
 def send_broadcast(viber_request, viber):
-    VIBER_BROADCAST_URL = https://chatapi.viber.com/pa/broadcast_message
+    VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
 
     headers = {
         "X-Viber-Auth-Token": settings.auth_token,
