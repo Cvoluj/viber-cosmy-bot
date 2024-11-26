@@ -1,6 +1,6 @@
 import requests
 from viberbot.api.messages.text_message import TextMessage
-from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, 
+from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage
 from viberbot.api.messages.data_types.location import Location
 
 
@@ -267,7 +267,7 @@ def send_broadcast(viber_request, viber):
 
     payload = {
         "broadcast_list": [
-            ""
+            "",
         ],
         "type": "text",
         "text": "Hello! This is a broadcast message from our bot."
