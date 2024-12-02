@@ -22,6 +22,7 @@ viber = Api(BotConfiguration(
 ))
 startup_login()
 global broadcast
+broadcast = None
 
 @app.route('/', methods=['POST'])
 def incoming():
@@ -61,14 +62,12 @@ def incoming():
                     case "OrderHistory":
                         send_order_history(viber_request, viber)
                     case "Broadcast":
-                        global broadcast
                         is_admin = get_is_admin_from_user_id(viber_request.sender.id)
                         if is_admin != 1:
                             return
                         
                         send_broadcast(viber_request, viber, broadcast)
                     case "Add Url":
-                        global broadcast
                         is_admin = get_is_admin_from_user_id(viber_request.sender.id)
                         if is_admin != 1:
                             return
