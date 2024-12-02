@@ -1,14 +1,16 @@
-from dataclasses import dataclass
 import threading
 import time
+from flask import Response
 import requests
+from copy import deepcopy
+from dataclasses import dataclass
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, VideoMessage
 from viberbot.api.messages.data_types.location import Location
 
 
-from keyboards import WHITE_BORDER, format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
-    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button, admin_keyboard
+from keyboards import MILKY_COLOR, WHITE_BORDER, format_text_with_color, main_keyboard, rich_media_links_part2, rich_media_links_part1, contacts_keyboard, map_keyboard, menu_keyboard, \
+    settings_keyboard, share_phone_keyboard, no_orders_keyboard, buttons_settings, menu_button, admin_keyboard, base_rich_media, frame
 from queries import add_user_to_db, get_is_admin_from_user_id, get_user_ids, give_admin_rules
 from settings import settings
 from queries import get_number_from_user_id
@@ -34,7 +36,7 @@ def main_menu_message(message, viber_request, viber):
     print(message)
     viber.send_messages(viber_request.sender.id, [
         PictureMessage(
-            media="https://dl-media.viber.com/5/media/2/short/any/sig/image/0x0/de92/c63b057a7deaafaf414a4114e0e283dc300183cd6f11e9f37b4f691eb57fde92.jpg?Expires=1732657826&Signature=u1RXSVQn3aSjn6ekSPQ446KdpoijL-aOlxocI2vFWl4knUCX9rvPr13jeRG64kTTHkzMlwWl4ZaQRQPNLCUZtWhXv9FOyP35aLgewGfXwXMFs7Ro13ksG0u9GEXOMlgEloB-vtLAcRUm4lEua-VcPoATaqqbGRpYyjU4OiDnAkf-bgSG-oo2wrH~ZpxRF5TI62P9p-TpnuPILWCAYziSYXfCl8zusZ8MWrW096mSX1GAK7VxZlrbO0oJKJl~OvIxOpjtAY3MifVoozy0o2IH4MBf0IOF5DIcJxkdjyMdZ52Ghcf0rwKKAHhHYZI8Qz0-rVx6EDp1q5WamP1iV0DtNQ__&Key-Pair-Id=APKAJ62UNSBCMEIPV4HA", 
+            media=f'{expose_url}/static/cosmy.jpg', 
             min_api_version=6),
     ])
     viber.send_messages(viber_request.sender.id, [
@@ -333,7 +335,7 @@ def add_url_button(viber_request, viber, is_retry=False):
             ]
         )
 
-    waiters[viber_request.sedner.id] = Waiter(
+    waiters[viber_request.sender.id] = Waiter(
         recieved_message=None, 
         sender_id=viber_request.sender.id,
         is_waiting=True
@@ -344,6 +346,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
     validated_message = validate_url(message_text)
     if not validated_message:
         add_url_button(viber_request, viber, is_retry=True)
+        return Response(status=200)
 
     waiter.recieved_message = validated_message
     waiter.is_waiting = False
@@ -351,7 +354,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
     viber.send_messages(
         viber_request.sender.id,
         [
-            TextMessage(text="Посилання додано до розсилки!", min_api_version=6)
+            TextMessage(text=f"Посилання додано до розсилки!\n{waiter.recieved_message}", min_api_version=6, keyboard=admin_keyboard)
         ]
     )
     return 
@@ -363,29 +366,56 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
         "Content-Type": "application/json"
     }
     user_ids = get_user_ids()
-    user_ids_batches = split_on_batches(user_ids, 300)
+    user_ids_batches = split_on_batches(user_ids, 150)
     batch_thread = threading.Thread(target=send_broadcast_message, args=(viber_request, viber, user_ids_batches, headers, broadcast))
     batch_thread.start()
 
 def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broadcast):
     waiter = waiters.get(viber_request.sender.id)
-    suffix = ""
+    rich_button_url = ""
     if waiter.recieved_message:
-        suffix = waiter.recieved_message
+        rich_button_url = {
+            "Columns": 6,
+            "Rows": 1,
+            "ActionType": "open-url",
+            "ActionBody": waiter.recieved_message,
+            "Text": format_text_with_color("Детальніше..."),
+            "TextSize": "large",
+            "TextVAlign": "middle",
+            "TextHAlign": "center",
+            "BgColor": MILKY_COLOR,
+            "Silent": True,
+            "OpenURLType": "internal",
+            "Frame": frame
+        }
 
+        waiter.recieved_message = ""
 
     for users in batch:
+        deepcopy_base_rich_media = deepcopy(base_rich_media)
+
+        if rich_button_url != "":
+            deepcopy_base_rich_media["Buttons"].insert(0, rich_button_url)
+            deepcopy_base_rich_media["ButtonsGroupRows"] = 2
+
         payload = {
             "broadcast_list": users,
-            "text": broadcast.thumbnail + " " + suffix,
+            "text": broadcast.thumbnail,
             "media": broadcast.media,
             "type":broadcast.type,
             **broadcast.kwargs,
         }
 
+        rich_media_payload = {
+            "broadcast_list": users,
+            "min_api_version":6,
+            "type":"rich_media",
+            "rich_media": deepcopy_base_rich_media
+        }
         try:
-            response = requests.post(VIBER_BROADCAST_URL, json=payload, headers=headers)
-            print(f"Sent batch: {users}, Response: {response.status_code}, {response.text}")
+            response_base = requests.post(VIBER_BROADCAST_URL, json=payload, headers=headers)
+            response_rich_media = requests.post(VIBER_BROADCAST_URL, json=rich_media_payload, headers=headers)
+            print(f"Sent batch: {users}, Response: {response_base.status_code}, {response_base.text}")
         except requests.RequestException as e:
             print(f"Error sending batch: {users}, Error: {e}")
         time.sleep(11)

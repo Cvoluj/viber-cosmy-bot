@@ -421,6 +421,16 @@ rich_media_links_part2 = {
     ]
 }
 
+base_rich_media = {
+    "Type": "rich_media",
+    "ButtonsGroupColumns": 6,  
+    "ButtonsGroupRows": 1,    
+    "BgColor": WHITE_BORDER,    
+    "Buttons": [
+        menu_button
+    ],
+}
+
 no_orders_keyboard = {
     "Type": "keyboard",
     "DefaultHeight": False,

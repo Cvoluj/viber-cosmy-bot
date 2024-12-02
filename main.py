@@ -45,10 +45,16 @@ def incoming():
             if get_number_from_user_id(viber_request.sender.id):
                 admin_pattern = f"admin {settings.admin_password}"
 
-                waiter = waiters.get(viber_request.sender.id) 
+                waiter = waiters.get(viber_request.sender.id)
+
+                is_admin = get_is_admin_from_user_id(viber_request.sender.id)
+                if is_admin != 1:
+                    return Response(status=200)
+
                 if waiter and waiter.is_waiting:
-                    handle_url_message(viber, viber_request, waiter, message.text)
-                    
+                    handle_url_message(viber_request, viber, waiter, message.text)
+                    return Response(status=200)
+
                 match message.text:
                     case "Information":
                         send_rich_media_with_links(viber_request, viber)
