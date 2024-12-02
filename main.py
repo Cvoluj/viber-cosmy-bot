@@ -66,12 +66,14 @@ def incoming():
                         if is_admin != 1:
                             return
                         
+                        global broadcast
                         send_broadcast(viber_request, viber, broadcast)
                     case "Add Url":
                         is_admin = get_is_admin_from_user_id(viber_request.sender.id)
                         if is_admin != 1:
                             return
                         
+                        global broadcast
                         add_url_button(viber_request, viber, broadcast)
                     case _:
                         if message.text == admin_pattern:
