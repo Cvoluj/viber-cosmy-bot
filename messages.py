@@ -14,6 +14,7 @@ from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
 from utils import format_order_data, split_on_batches, validate_url
+from waiters_list import waiters, Waiter
 
 expose_url = settings.expose_url
 VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
@@ -316,30 +317,44 @@ def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
     )
     return Broadcast(func=func, kwargs=kwargs, thumbnail=thumbnail, media=media_url, type=type)
 
-def add_url_button(viber_request, viber, broadcast: Broadcast):
+def add_url_button(viber_request, viber, is_retry=False):
+    if not is_retry:
+        viber.send_messages(
+            viber_request.sender.id,
+            [
+                TextMessage(text="Надішліть посилання", min_api_version=6)
+            ]
+        )
+    else:
+        viber.send_messages(
+            viber_request.sender.id,
+            [
+                TextMessage(text="Надішліть валідне посилання", min_api_version=6)
+            ]
+        )
+
+    waiters[viber_request.sedner.id] = Waiter(
+        recieved_message=None, 
+        sender_id=viber_request.sender.id,
+        is_waiting=True
+    )
+    return
+
+def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
+    validated_message = validate_url(message_text)
+    if not validated_message:
+        add_url_button(viber_request, viber, is_retry=True)
+
+    waiter.recieved_message = validated_message
+    waiter.is_waiting = False
+
     viber.send_messages(
         viber_request.sender.id,
         [
-            TextMessage(text="Надішліть посилання", min_api_version=6)
+            TextMessage(text="Посилання додано до розсилки!", min_api_version=6)
         ]
     )
-
-    def handle_user_input(viber_request):
-        user_input = viber_request.message.text
-        validated_url = validate_url(user_input)
-
-        if validated_url:
-            broadcast.url_button = validated_url
-        else:
-            viber.send_messages(
-                viber_request.sender.id,
-                [
-                    TextMessage(text="Невалідне посилання. Спробуйте ще раз.", min_api_version=6)
-                ]
-            )
-            return handle_user_input
-    return handle_user_input
-
+    return 
 
 
 def send_broadcast(viber_request, viber, broadcast: Broadcast):
@@ -349,14 +364,20 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
     }
     user_ids = get_user_ids()
     user_ids_batches = split_on_batches(user_ids, 300)
-    batch_thread = threading.Thread(target=send_broadcast_message, args=(user_ids_batches, headers, broadcast))
+    batch_thread = threading.Thread(target=send_broadcast_message, args=(viber_request, viber, user_ids_batches, headers, broadcast))
     batch_thread.start()
 
-def send_broadcast_message(batch, headers, broadcast: Broadcast):
+def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broadcast):
+    waiter = waiters.get(viber_request.sender.id)
+    suffix = ""
+    if waiter.recieved_message:
+        suffix = waiter.recieved_message
+
+
     for users in batch:
         payload = {
             "broadcast_list": users,
-            "text": broadcast.thumbnail + " " + broadcast.url_button,
+            "text": broadcast.thumbnail + " " + suffix,
             "media": broadcast.media,
             "type":broadcast.type,
             **broadcast.kwargs,

@@ -8,11 +8,12 @@ from viberbot.api.messages import ContactMessage, VideoMessage, PictureMessage
 from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest
 from api.startup_login import startup_login
 from keyboards import share_phone_keyboard
-from messages import add_url_button, greet_new_admin, main_menu_message, contact_recived_message, prepare_broadcast_message, send_broadcast, send_rich_media_with_links, conversation_started_message, \
+from messages import add_url_button, greet_new_admin, handle_url_message, main_menu_message, contact_recived_message, prepare_broadcast_message, send_broadcast, send_rich_media_with_links, conversation_started_message, \
     send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, send_order_history
 from queries import get_is_admin_from_user_id, get_number_from_user_id
 
 from settings import settings
+from waiters_list import waiters
 
 app = Flask(__name__)
 viber = Api(BotConfiguration(
@@ -23,6 +24,7 @@ viber = Api(BotConfiguration(
 startup_login()
 global broadcast
 broadcast = None
+
 
 @app.route('/', methods=['POST'])
 def incoming():
@@ -37,11 +39,16 @@ def incoming():
         
         if isinstance(message, ContactMessage):
             contact_recived_message(message, viber_request, viber)
-
+        
         if isinstance(message, TextMessage):
             print(message)
             if get_number_from_user_id(viber_request.sender.id):
                 admin_pattern = f"admin {settings.admin_password}"
+
+                waiter = waiters.get(viber_request.sender.id) 
+                if waiter and waiter.is_waiting:
+                    handle_url_message(viber, viber_request, waiter, message.text)
+                    
                 match message.text:
                     case "Information":
                         send_rich_media_with_links(viber_request, viber)
@@ -73,7 +80,7 @@ def incoming():
                         if is_admin != 1:
                             return
                         
-                        add_url_button(viber_request, viber, broadcast)
+                        add_url_button(viber_request, viber)
                     case _:
                         if message.text == admin_pattern:
                             greet_new_admin(viber_request, viber)

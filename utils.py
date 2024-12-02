@@ -38,7 +38,7 @@ def validate_url(message: str) -> str:
     if ' ' not in message and '.' in message:
         return f"https://{message}"  
     
-    return "Cannot convert message to a valid URL"
+    return None
 
 if __name__ == '__main__':
     print(validate_url("cosmy.com.ua/krem-dlja-chuvstvitelnoj-kozhi-lica-babor-skinovage-ua"))     
