@@ -13,7 +13,7 @@ from queries import add_user_to_db, get_is_admin_from_user_id, get_user_ids, giv
 from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
-from utils import format_order_data, split_on_batches
+from utils import format_order_data, split_on_batches, validate_url
 
 expose_url = settings.expose_url
 VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
@@ -295,7 +295,7 @@ class Broadcast:
     thumbnail: str | None
     media: str | None
     type: str
-
+    url_button: str | None = None
 
 
 def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
@@ -316,6 +316,31 @@ def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
     )
     return Broadcast(func=func, kwargs=kwargs, thumbnail=thumbnail, media=media_url, type=type)
 
+def add_url_button(viber_request, viber, broadcast: Broadcast):
+    viber.send_messages(
+        viber_request.sender.id,
+        [
+            TextMessage(text="Надішліть посилання", min_api_version=6)
+        ]
+    )
+
+    def handle_user_input(viber_request):
+        user_input = viber_request.message.text
+        validated_url = validate_url(user_input)
+
+        if validated_url:
+            broadcast.url_button = validated_url
+        else:
+            viber.send_messages(
+                viber_request.sender.id,
+                [
+                    TextMessage(text="Невалідне посилання. Спробуйте ще раз.", min_api_version=6)
+                ]
+            )
+            return handle_user_input
+    return handle_user_input
+
+
 
 def send_broadcast(viber_request, viber, broadcast: Broadcast):
     headers = {
@@ -331,7 +356,7 @@ def send_broadcast_message(batch, headers, broadcast: Broadcast):
     for users in batch:
         payload = {
             "broadcast_list": users,
-            "text": broadcast.thumbnail,
+            "text": broadcast.thumbnail + " " + broadcast.url_button,
             "media": broadcast.media,
             "type":broadcast.type,
             **broadcast.kwargs,

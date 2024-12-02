@@ -70,7 +70,7 @@ share_phone_keyboard = {
             "BgColor": MILKY_COLOR,
             "ActionType": "share-phone",
             "ActionBody": "Share phone number",
-            "Text": format_text_with_color('📞 Share Phone Number'),
+            "Text": format_text_with_color('📞 Поділитись номер телефона'),
             "TextSize": "large",
             "TextVAlign": "middle",
             "TextHAlign": "center",
@@ -459,6 +459,20 @@ admin_keyboard = {
             "TextVAlign": "middle",
             "Frame": frame,
             "Silent": True
+        },
+        {
+            "Columns": 6,
+            "Rows": 1,
+            "BgColor": MILKY_COLOR,
+            "ActionType": "reply",
+            "ActionBody": "Add Url",
+            "Text": format_text_with_color("Додати посилання"),
+            "TextSize": "large",
+            "TextHAlign": "center",
+            "TextVAlign": "middle",
+            "Frame": frame,
+            "Silent": True
+
         },
         menu_button
     ]
