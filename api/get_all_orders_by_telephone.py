@@ -21,7 +21,7 @@ def get_all_last_orders_by_telephone(telephone):
         if error is not None:
             print(f"{error}, updating api key")
             startup_login()
-            get_all_last_orders_by_telephone(telephone)
+            return get_all_last_orders_by_telephone(telephone)
         return response_json
     except requests.exceptions.RequestException as e:
         print(f"Error recieving all orders by telephone: {e}")

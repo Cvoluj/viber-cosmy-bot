@@ -20,7 +20,7 @@ def get_last_order_by_telephone(telephone):
         if error is not None:
             print(f"{error}, updating api key")
             startup_login()
-            get_last_order_by_telephone(telephone)
+            return get_last_order_by_telephone(telephone)
         return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Error recieving last order by telephone error: {e}")
