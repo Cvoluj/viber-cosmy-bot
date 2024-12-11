@@ -1,4 +1,5 @@
 import requests
+from api import startup_login
 from settings import settings
 
 
@@ -14,6 +15,12 @@ def get_last_order_by_telephone(telephone):
         url = f'https://cosmy.com.ua/index.php?route=api/order/lastOrderByTelephone&api_token={settings.cosmy_api_token}&telephone={telephone}'
         response = requests.get(url, headers=headers)
         response.raise_for_status()
+        response_json = response.json()
+        error = response_json.get("error")
+        if error is not None:
+            print(f"{error}, updating api key")
+            startup_login()
+            get_last_order_by_telephone(telephone)
         return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Error recieving last order by telephone error: {e}")
