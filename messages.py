@@ -148,7 +148,7 @@ def send_my_order_message(viber_request, viber):
     order_data = get_last_order_by_telephone(number)
     print(order_data)
     if order_data is None or 'order' not in order_data.keys():
-        send_no_orders(viber_request, viber, text="*Ви наразі не очікуєте доставку або не робили замовлення, все в ваших руках*")
+        send_no_orders(viber_request, viber)
         return
     
     order = order_data.get('order')
@@ -156,7 +156,7 @@ def send_my_order_message(viber_request, viber):
         order_details = format_order_data(order_data)
         send_order_data_to_user(viber_request, viber, order_details)
     else:
-        send_no_orders(viber_request, viber)
+        send_no_orders(viber_request, viber, text="*Ви наразі не очікуєте доставку або не робили замовлення, все в ваших руках*")
 
 
 def send_order_data_to_user(viber_request, viber, order_details):
