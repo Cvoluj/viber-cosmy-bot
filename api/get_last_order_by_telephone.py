@@ -1,5 +1,5 @@
 import requests
-from api import startup_login
+from api.startup_login import startup_login
 from settings import settings
 
 
