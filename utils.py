@@ -15,6 +15,10 @@ def format_order_data(order_data):
         "Товари у замовленні": [
             f"*{product.get('product_info', {}).get('name', 'Немає даних').strip()}*"
             for product in order.get('order_products', [])
+        ],
+        "Посилання":[
+            f"{product.get("product_ifno", {}).get("url", "").strip()}*"
+            for product in order.get('order_products', [])
         ]
     }
     return details
