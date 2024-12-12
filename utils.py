@@ -13,11 +13,11 @@ def format_order_data(order_data):
         "Місто": f"*{order.get('payment_city', 'Немає даних')}*",
         "Адреса": f"*{order.get('payment_address_1', 'Немає даних')}*",
         "Товари у замовленні": [
-            f"*{product.get('product_info', {}).get('name', 'Немає даних').strip()}*"
+            f"*{product.get('product_info', {}).get('name', 'Немає даних').strip()}*\n"
             for product in order.get('order_products', [])
         ],
         "Посилання":[
-            f"{product.get('product_info', {}).get('url', '').strip()}"
+            f"{product.get('product_info', {}).get('url', '').strip()}\n"
             for product in order.get('order_products', [])
         ]
     }
