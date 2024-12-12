@@ -17,7 +17,7 @@ def format_order_data(order_data):
             for product in order.get('order_products', [])
         ],
         "Посилання":[
-            f"*{product.get('product_info', {}).get('url', '').strip()}*"
+            f"{product.get('product_info', {}).get('url', '').strip()}"
             for product in order.get('order_products', [])
         ]
     }

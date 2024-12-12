@@ -163,7 +163,7 @@ def send_order_data_to_user(viber_request, viber, order_details):
     if not order_details:
         return
     
-    response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key != "Товари у замовленні"])
+    response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key not in ("Товари у замовленні", "Посилання")])
     products_message = "Товари у замовленні:\n" + "\n".join(order_details["Товари у замовленні"])
     url_message = "Посилання на товар:\n" + "\n".join(order_details["Посилання"])
     full_message = f"{response_message}\n\n{products_message}\n{url_message}"
@@ -223,7 +223,7 @@ def show_order(viber_request, viber, orders_data, index):
 
     order_details = format_order_data({'order': order})
 
-    response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key != "Товари у замовленні"])
+    response_message = "\n".join([f"{key}: {value}" for key, value in order_details.items() if key not in ("Товари у замовленні", "Посилання")])
     products_message = "Товари у замовленні:\n" + "\n".join(order_details["Товари у замовленні"])
     url_message = "Посилання на товар:\n" + "\n".join(order_details["Посилання"])
     full_message = f"{response_message}\n\n{products_message}\n{url_message}"
