@@ -24,8 +24,9 @@ def format_order_data(order_data):
     return details
 
 
-def split_on_batches(list_to_split: list, batch: int):
-    return [list_to_split[i:i + batch] for i in range(0, len(list_to_split), batch)]
+def split_on_batches(iterable, batch: int):
+    iterable_list = list(iterable)
+    return [iterable_list[i:i + batch] for i in range(0, len(iterable_list), batch)]
 
 
 def validate_url(message: str) -> str:

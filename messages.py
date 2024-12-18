@@ -17,6 +17,7 @@ from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
 from utils import format_order_data, split_on_batches, validate_url
 from waiters_list import waiters, Waiter
+from viber_users import viber_users
 
 expose_url = settings.expose_url
 VIBER_BROADCAST_URL = "https://chatapi.viber.com/pa/broadcast_message"
@@ -368,7 +369,8 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
         "Content-Type": "application/json"
     }
     user_ids = get_user_ids()
-    user_ids_batches = split_on_batches(user_ids, 150)
+    viber_users.union(user_ids)
+    user_ids_batches = split_on_batches(viber_users, 150)
     batch_thread = threading.Thread(target=send_broadcast_message, args=(viber_request, viber, user_ids_batches, headers, broadcast))
     batch_thread.start()
 
