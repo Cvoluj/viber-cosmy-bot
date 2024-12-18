@@ -343,6 +343,7 @@ def add_url_button(viber_request, viber, is_retry=False):
             ]
         )
 
+    print("waiter added")
     waiters[viber_request.sender.id] = Waiter(
         recieved_message=None, 
         sender_id=viber_request.sender.id,
