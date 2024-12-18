@@ -45,7 +45,7 @@ def incoming():
                 admin_pattern = f"admin {settings.admin_password}"
 
                 waiter = waiters.get(viber_request.sender.id)
-
+                print(waiters)
                 is_admin = get_is_admin_from_user_id(viber_request.sender.id)
                 if is_admin != 1:
                     return Response(status=200)
