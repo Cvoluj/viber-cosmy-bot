@@ -52,6 +52,7 @@ def incoming():
                     return Response(status=200)
 
                 if waiter and waiter.is_waiting:
+                    print("Your want make broadcast")
                     handle_url_message(viber_request, viber, waiter, message.text)
                     return Response(status=200)
 
@@ -85,7 +86,7 @@ def incoming():
                         is_admin = get_is_admin_from_user_id(viber_request.sender.id)
                         if is_admin != 1:
                             return
-                        
+                        print("ur and admin")
                         add_url_button(viber_request, viber)
                     case _:
                         if message.text == admin_pattern:
