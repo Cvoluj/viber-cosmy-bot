@@ -217,7 +217,7 @@ def send_order_history(viber_request, viber, index=0):
 
     orders_data = get_all_last_orders_by_telephone(number)
 
-    if not orders_data or len(orders_data) == 0:
+    if not orders_data or len(orders_data) == 0 or "Увага! Замовлення" in orders_data:
         send_no_orders(viber_request, viber)
         return
     
