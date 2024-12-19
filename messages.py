@@ -382,6 +382,7 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
     batch_thread.start()
 
 def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broadcast):
+    print(f"Waiter: {waiter}")
     waiter = waiters.get(viber_request.sender.id)
     rich_button_url = ""
     if waiter.recieved_message:
