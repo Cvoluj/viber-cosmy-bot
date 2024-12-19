@@ -360,6 +360,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
     waiter.recieved_message = validated_message
     waiter.is_waiting = False
 
+    print("url validated")
     viber.send_messages(
         viber_request.sender.id,
         [
