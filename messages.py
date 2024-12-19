@@ -358,8 +358,6 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
         return Response(status=200)
 
     waiter.recieved_message = validated_message
-    waiter.is_waiting = False
-
     print("url validated")
     viber.send_messages(
         viber_request.sender.id,
@@ -382,8 +380,8 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
     batch_thread.start()
 
 def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broadcast):
-    print(f"Waiter: {waiter}")
     waiter = waiters.get(viber_request.sender.id)
+    print(f"Waiter: {waiter}")
     rich_button_url = ""
     if waiter.recieved_message:
         rich_button_url = {
@@ -402,6 +400,7 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
         }
 
         waiter.recieved_message = ""
+    waiter.is_waiting = False
 
     for users in batch:
         deepcopy_base_rich_media = deepcopy(base_rich_media)
