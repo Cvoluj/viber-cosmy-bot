@@ -3,7 +3,7 @@ import time
 from flask import Response
 import requests
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, VideoMessage
 from viberbot.api.messages.data_types.location import Location
@@ -16,7 +16,7 @@ from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
 from utils import format_order_data, split_on_batches, validate_url
-from waiters_list import waiters, Waiter
+from waiters_list import Waiter, get_waiter, load_waiters, save_waiters, update_waiter
 from viber_users import viber_users
 
 expose_url = settings.expose_url
@@ -343,11 +343,19 @@ def add_url_button(viber_request, viber, is_retry=False):
             ]
         )
 
-    waiters[viber_request.sender.id] = Waiter(
+
+    waiters = load_waiters()
+
+    waiter = Waiter(
         recieved_message=None, 
         sender_id=viber_request.sender.id,
         is_waiting=True
     )
+
+
+    waiters[viber_request.sender.id] = asdict(waiter) 
+    save_waiters(waiters)
+
     print(f"Waiter: {waiters}")
     return
 
@@ -358,6 +366,8 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
         return Response(status=200)
 
     waiter.recieved_message = validated_message
+    update_waiter(viber_request.sender.id, asdict(waiter))
+
     print("url validated")
     viber.send_messages(
         viber_request.sender.id,
@@ -380,7 +390,7 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
     batch_thread.start()
 
 def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broadcast):
-    waiter = waiters.get(viber_request.sender.id)
+    waiter = get_waiter(viber_request.sender.id)
     print(f"Waiter: {waiter}")
     rich_button_url = ""
     if waiter.recieved_message:
@@ -401,6 +411,8 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
 
         waiter.recieved_message = ""
     waiter.is_waiting = False
+    
+    update_waiter(viber_request.sender.id, waiter)
 
     for users in batch:
         deepcopy_base_rich_media = deepcopy(base_rich_media)
