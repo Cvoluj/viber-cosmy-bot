@@ -57,6 +57,7 @@ def incoming():
                     case "Information":
                         send_rich_media_with_links(viber_request, viber)
                     case "Menu":
+                        print("Menu button clicked")
                         main_menu_message(message, viber_request, viber)
                     case "ContactCenter":
                         send_contact_keyboard(viber_request, viber)
