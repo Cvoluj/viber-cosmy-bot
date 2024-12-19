@@ -1,9 +1,11 @@
+import json
+import os
 import threading
 import time
 from flask import Response
 import requests
 from copy import deepcopy
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import PictureMessage, KeyboardMessage, RichMediaMessage, LocationMessage, VideoMessage
 from viberbot.api.messages.data_types.location import Location
@@ -309,6 +311,27 @@ class Broadcast:
     url_button: str | None = None
 
 
+BROADCAST_FILE = "broadcast.json"
+lock = threading.Lock()
+
+
+def save_broadcast(broadcast: Broadcast):
+    with lock:
+        with open(BROADCAST_FILE, "w") as file:
+            json.dump(asdict(broadcast), file)
+
+def load_broadcast():
+    if not os.path.exists(BROADCAST_FILE):
+        return None
+    with open(BROADCAST_FILE, "r") as file:
+        data = json.load(file)
+        return dict_to_dataclass(Broadcast, data)
+
+def dict_to_dataclass(cls, data):
+    field_names = {f.name for f in fields(cls)}
+    filtered_data = {k: v for k, v in data.items() if k in field_names}
+    return cls(**filtered_data)
+
 def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
     if '/image/' in media_url:
         func = PictureMessage
@@ -325,7 +348,11 @@ def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
             func(text=thumbnail, min_api_version=6, media=media_url, **kwargs, keyboard=admin_keyboard)
         ]
     )
-    return Broadcast(func=func, kwargs=kwargs, thumbnail=thumbnail, media=media_url, type=type)
+
+    broadcast = Broadcast(func=func, kwargs=kwargs, thumbnail=thumbnail, media=media_url, type=type)
+    save_broadcast(broadcast)
+
+    return Response(status=200)
 
 def add_url_button(viber_request, viber, is_retry=False):
     if not is_retry:
