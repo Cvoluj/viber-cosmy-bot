@@ -409,8 +409,8 @@ def send_broadcast(viber_request, viber, broadcast: Broadcast):
         "Content-Type": "application/json"
     }
     user_ids = get_user_ids()
-    viber_users.union(user_ids)
-    user_ids_batches = split_on_batches(viber_users, 150)
+    # viber_users.union(user_ids)
+    user_ids_batches = split_on_batches(user_ids, 150)
     batch_thread = threading.Thread(target=send_broadcast_message, args=(viber_request, viber, user_ids_batches, headers, broadcast))
     batch_thread.start()
 
