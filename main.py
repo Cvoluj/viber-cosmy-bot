@@ -44,8 +44,8 @@ def incoming():
                 waiter = get_waiter(viber_request.sender.id)
                 print(load_waiters())
                 is_admin = get_is_admin_from_user_id(viber_request.sender.id)
-                if is_admin != 1:
-                    return Response(status=200)
+                # if is_admin != 1:
+                #     return Response(status=200)
 
                 print(f"Waiter: {load_waiters()}")
                 if waiter and waiter["is_waiting"]:
