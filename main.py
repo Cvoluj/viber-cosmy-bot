@@ -50,6 +50,7 @@ def incoming():
                 if is_admin != 1:
                     return Response(status=200)
 
+                print(f"Waiter: {waiters}")
                 if waiter and waiter.is_waiting:
                     print("Your want make broadcast")
                     handle_url_message(viber_request, viber, waiter, message.text)
