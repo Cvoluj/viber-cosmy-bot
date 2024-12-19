@@ -372,7 +372,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
     viber.send_messages(
         viber_request.sender.id,
         [
-            TextMessage(text=f"Посилання додано до розсилки!\n{waiter.recieved_message}", min_api_version=6, keyboard=admin_keyboard)
+            TextMessage(text=f"Посилання додано до розсилки!\n{waiter["recieved_message"]}", min_api_version=6, keyboard=admin_keyboard)
         ]
     )
     return 
@@ -393,12 +393,12 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
     waiter = get_waiter(viber_request.sender.id)
     print(f"Waiter: {waiter}")
     rich_button_url = ""
-    if waiter.recieved_message:
+    if waiter["recieved_message"]:
         rich_button_url = {
             "Columns": 6,
             "Rows": 1,
             "ActionType": "open-url",
-            "ActionBody": waiter.recieved_message,
+            "ActionBody": waiter["recieved_message"],
             "Text": format_text_with_color("Детальніше..."),
             "TextSize": "large",
             "TextVAlign": "middle",
