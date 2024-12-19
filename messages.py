@@ -2,6 +2,7 @@ import json
 import os
 import threading
 import time
+import pickle
 from flask import Response
 import requests
 from copy import deepcopy
@@ -317,16 +318,15 @@ lock = threading.Lock()
 
 def save_broadcast(broadcast: Broadcast):
     with lock:
-        with open(BROADCAST_FILE, "w") as file:
-            broadcast_dict = asdict(broadcast)
-            json.dump(broadcast_dict, file)
+        with open(BROADCAST_FILE, "wb") as file:
+            pickle.dump(broadcast, file)
 
 def load_broadcast():
     if not os.path.exists(BROADCAST_FILE):
         return None
-    with open(BROADCAST_FILE, "r") as file:
-        data = json.load(file)
-        return data
+    with open(BROADCAST_FILE, "rb") as file:
+        return pickle.load(file)
+
 
 
 def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
@@ -447,10 +447,10 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
 
         payload = {
             "broadcast_list": users,
-            "text": broadcast["thumbnail"],
-            "media": broadcast["media"],
-            "type":broadcast["type"],
-            **broadcast["kwargs"],
+            "text": broadcast.thumbnail,
+            "media": broadcast.media,
+            "type":broadcast.type,
+            **broadcast.kwargs,
         }
 
         rich_media_payload = {
