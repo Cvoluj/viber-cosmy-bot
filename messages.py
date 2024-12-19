@@ -326,12 +326,8 @@ def load_broadcast():
         return None
     with open(BROADCAST_FILE, "r") as file:
         data = json.load(file)
-        return dict_to_dataclass(Broadcast, data)
+        return data
 
-def dict_to_dataclass(cls, data):
-    field_names = {f.name for f in fields(cls)}
-    filtered_data = {k: v for k, v in data.items() if k in field_names}
-    return cls(**filtered_data)
 
 def prepare_broadcast_message(viber_request, viber, media_url, thumbnail):
     if '/image/' in media_url:
@@ -451,10 +447,10 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
 
         payload = {
             "broadcast_list": users,
-            "text": broadcast.thumbnail,
-            "media": broadcast.media,
-            "type":broadcast.type,
-            **broadcast.kwargs,
+            "text": broadcast["thumbnail"],
+            "media": broadcast["media"],
+            "type":broadcast["type"],
+            **broadcast["kwargs"],
         }
 
         rich_media_payload = {
