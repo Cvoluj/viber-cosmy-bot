@@ -365,7 +365,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
         add_url_button(viber_request, viber, is_retry=True)
         return Response(status=200)
 
-    waiter.recieved_message = validated_message
+    waiter["recieved_message"] = validated_message
     update_waiter(viber_request.sender.id, asdict(waiter))
 
     print("url validated")
@@ -409,8 +409,8 @@ def send_broadcast_message(viber_request, viber, batch, headers, broadcast: Broa
             "Frame": frame
         }
 
-        waiter.recieved_message = ""
-    waiter.is_waiting = False
+        waiter["recieved_message"] = ""
+    waiter["is_waiting"] = False
     
     update_waiter(viber_request.sender.id, waiter)
 
