@@ -18,6 +18,7 @@ def get_all_last_orders_by_telephone(telephone):
         response.raise_for_status()
         response_json = response.json()
         error = response_json.get("error")
+        print(error, response_json)
         if error is not None and "Увага! Замовлення не знайдено" not in error:
             print(f"{error}, updating api key")
             startup_login()
