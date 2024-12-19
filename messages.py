@@ -318,7 +318,8 @@ lock = threading.Lock()
 def save_broadcast(broadcast: Broadcast):
     with lock:
         with open(BROADCAST_FILE, "w") as file:
-            json.dump(asdict(broadcast), file)
+            broadcast_dict = asdict(broadcast)
+            json.dump(broadcast_dict, file)
 
 def load_broadcast():
     if not os.path.exists(BROADCAST_FILE):
