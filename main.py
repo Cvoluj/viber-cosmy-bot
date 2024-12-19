@@ -9,9 +9,9 @@ from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationSt
 from api.startup_login import startup_login
 from keyboards import share_phone_keyboard
 from messages import add_url_button, greet_new_admin, handle_url_message, main_menu_message, contact_recived_message, prepare_broadcast_message, send_broadcast, send_rich_media_with_links, conversation_started_message, \
-    send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, send_order_history, waiters
+    send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, send_order_history
 from queries import get_is_admin_from_user_id, get_number_from_user_id
-
+from waiters_list import waiters
 from settings import settings
 
 app = Flask(__name__)
