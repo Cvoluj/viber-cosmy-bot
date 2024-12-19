@@ -372,7 +372,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
     viber.send_messages(
         viber_request.sender.id,
         [
-            TextMessage(text=f"Посилання додано до розсилки!\n{waiter["recieved_message"]}", min_api_version=6, keyboard=admin_keyboard)
+            TextMessage(text=f"Посилання додано до розсилки!\n{waiter['recieved_message']}", min_api_version=6, keyboard=admin_keyboard)
         ]
     )
     return 
