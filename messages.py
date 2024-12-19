@@ -366,7 +366,7 @@ def handle_url_message(viber_request, viber, waiter: Waiter, message_text):
         return Response(status=200)
 
     waiter["recieved_message"] = validated_message
-    update_waiter(viber_request.sender.id, asdict(waiter))
+    update_waiter(viber_request.sender.id, waiter)
 
     print("url validated")
     viber.send_messages(
