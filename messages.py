@@ -217,7 +217,7 @@ def send_order_history(viber_request, viber, index=0):
 
     orders_data = get_all_last_orders_by_telephone(number)
     print(orders_data, type(orders_data))
-    if not orders_data or not isinstance(orders_data, dict) or "Увага! Замовлення" in orders_data.get("Error", ""):
+    if not orders_data or not isinstance(orders_data, dict) or "Увага! Замовлення" in orders_data.get("error", ""):
         send_no_orders(viber_request, viber)
         return 
     
