@@ -221,6 +221,12 @@ def send_order_history(viber_request, viber, index=0):
         send_no_orders(viber_request, viber)
         return 
     
+    try:
+        orders_data.get("orders")
+    except Exception:
+        send_no_orders(viber_request, viber)
+        return
+    
     show_order(viber_request, viber, orders_data, index)
     return
     
