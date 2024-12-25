@@ -3,12 +3,15 @@ from urllib.parse import urlparse
 
 
 def format_order_data(order_data):
+    def simplify_date(date_str):
+        return date_str.split()[0] if date_str else "Немає даних"
+
     order = order_data['order']
     details = {
         "Номер замовлення": f"*{order.get('order_id', 'Немає даних')}*",
         "Сума замовлення": f"*{order.get('total', 'Немає даних')}*",
         "Статус замовлення": f"*{order.get('order_status', 'Немає даних')}*",
-        "Дата замовлення": f"*{order.get('date_added', 'Немає даних')}*",
+        "Дата замовлення": f"*{simplify_date(order.get('date_added'))}*",
         "Спосіб доставки": f"*{order.get('shipping_method', 'Немає даних')}*",
         "Місто": f"*{order.get('payment_city', 'Немає даних')}*",
         "Адреса": f"*{order.get('payment_address_1', 'Немає даних')}*",
