@@ -239,7 +239,7 @@ def show_order(viber_request, viber, orders_data, index):
     order_details = format_order_data({'order': order})
 
     response_message = "\n".join([
-    f"{key}: *{float(value.strip('*')):.2f}*" if isinstance(value, str) and value.strip('*').replace('.', '', 1).isdigit()
+    f"{key}: *{float(value.strip('*')):.2f}*" if key == "Сума замовлення" and value.strip('*').replace('.', '', 1).isdigit()
     else f"{key}: {value}"
     for key, value in order_details.items()
     if key not in ("Товари у замовленні", "Посилання")
