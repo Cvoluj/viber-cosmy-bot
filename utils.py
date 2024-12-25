@@ -4,7 +4,9 @@ from urllib.parse import urlparse
 
 def format_order_data(order_data):
     def simplify_date(date_str):
-        return date_str.split()[0] if date_str else "Немає даних"
+        date = date_str.split()[0] if date_str else "Немає даних"
+        parts = date.split("-") 
+        return f"{parts[2]}.{parts[1]}.{parts[0]}" if len(parts) == 3 else "Не вдалось форматувати"
 
     order = order_data['order']
     details = {
