@@ -6,7 +6,7 @@ def add_user_to_db(user_id, number, is_admin=0):
     cursor = conn.cursor()
 
     cursor.execute('''
-        INSERT OR IGNORE INTO user (user_id, number, is_admin)
+        INSERT OR REPLACE INTO user (user_id, number, is_admin)
         VALUES (?, ?, ?)
     ''', (user_id, number, is_admin))
 
