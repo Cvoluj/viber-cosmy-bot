@@ -18,7 +18,7 @@ def clear_number_for_user_id(user_id):
     cursor = conn.cursor()
 
     try:
-        cursor.execute('UPDATE user SET number = NULL WHERE user_id = ?', (user_id,))
+        cursor.execute('UPDATE user SET number = "" WHERE user_id = ?', (user_id,))
         conn.commit()
     finally:
         conn.close()
