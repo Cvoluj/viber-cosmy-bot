@@ -13,6 +13,16 @@ def add_user_to_db(user_id, number, is_admin=0):
     conn.commit()
     conn.close()
 
+def clear_number_for_user_id(user_id):
+    conn = sqlite3.connect('viber_users.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('UPDATE user SET number = NULL WHERE user_id = ?', (user_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
 def get_number_from_user_id(user_id):
     conn = sqlite3.connect('viber_users.db')
     cursor = conn.cursor()
