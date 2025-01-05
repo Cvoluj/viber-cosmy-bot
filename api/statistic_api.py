@@ -17,7 +17,7 @@ def synchronize_user(user_id, phone):
         }
     response = requests.post(api_url, data=data, headers=headers)
     if response.status_code == 200:
-        print(f"User {user_id} synchronized successfully.")
+        print(f"User {user_id} synchronized successfully with phone {phone}")
     else:
         print(f"Failed to synchronize user {user_id}. Status code: {response.status_code}")
 
