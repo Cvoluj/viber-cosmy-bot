@@ -37,7 +37,8 @@ def incoming():
     
     viber_request = viber.parse_request(request.get_data())
     if isinstance(viber_request, ViberUnsubscribedRequest):
-        return handle_unsubscribed(viber_request)
+        handle_unsubscribed(viber_request)
+        return Response(status=200)
 
     viber_request = viber.parse_request(request.get_data())
     if isinstance(viber_request, ViberMessageRequest):
