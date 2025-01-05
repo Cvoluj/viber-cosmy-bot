@@ -58,7 +58,6 @@ def contact_recived_message(message, viber_request, viber):
     phone_number = message.contact.phone_number
     
     if phone_number:
-        print("called")
         add_user_to_db(
             viber_request.sender.id,
             phone_number,

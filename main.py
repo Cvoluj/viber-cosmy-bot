@@ -23,12 +23,21 @@ viber = Api(BotConfiguration(
 ))
 startup_login()
 
+def handle_unsubscribed(viber_request):
+    user_id = viber_request.user_id
+    print(f"User {user_id} has unsubscribed from the bot.")
+    phone_number = get_number_from_user_id(user_id)
+    delete_user_from_messenger(phone_number)
+
+
 @app.route('/', methods=['POST'])
-def incoming():
-    
-    
+def incoming():    
     if not viber.verify_signature(request.get_data(), request.headers.get('X-Viber-Content-Signature')):
         return Response(status=403)
+    
+    viber_request = viber.parse_request(request.get_data())
+    if isinstance(viber_request, ViberUnsubscribedRequest):
+        return handle_unsubscribed(viber_request)
 
     viber_request = viber.parse_request(request.get_data())
     if isinstance(viber_request, ViberMessageRequest):
@@ -114,11 +123,7 @@ def incoming():
 
             broadcast = prepare_broadcast_message(viber_request, viber, message.media, message.text) 
 
-        if isinstance(viber_request, ViberUnsubscribedRequest):
-            user_id = viber_request.user_id
-            print(f"User {user_id} has unsubscribed from the bot.")
-            phone_number = get_number_from_user_id(user_id)
-            delete_user_from_messenger(phone_number)
+        
 
 
     # First message from bot
