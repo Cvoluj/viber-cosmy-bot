@@ -18,6 +18,7 @@ from queries import add_user_to_db, get_is_admin_from_user_id, get_user_ids, giv
 from settings import settings
 from queries import get_number_from_user_id
 from api import get_all_last_orders_by_telephone, get_last_order_by_telephone
+from api.statistic_api import synchronize_user
 from utils import format_order_data, split_on_batches, validate_url
 from waiters_list import Waiter, get_waiter, load_waiters, save_waiters, update_waiter
 from viber_users import viber_users
@@ -62,6 +63,7 @@ def contact_recived_message(message, viber_request, viber):
             phone_number,
             is_admin=0, 
         )
+        synchronize_user(viber_request.sender.id, phone_number)
         main_menu_message(message, viber_request, viber)
 
 def send_rich_media_with_links(viber_request, viber):

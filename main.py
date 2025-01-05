@@ -5,8 +5,9 @@ from viberbot.api.messages.text_message import TextMessage
 from viberbot.api.messages import ContactMessage, VideoMessage, PictureMessage
 
 
-from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest
+from viberbot.api.viber_requests import ViberMessageRequest, ViberConversationStartedRequest, ViberUnsubscribedRequest
 from api.startup_login import startup_login
+from api.statistic_api import delete_user_from_messenger
 from keyboards import share_phone_keyboard
 from messages import add_url_button, greet_new_admin, handle_url_message, load_broadcast, main_menu_message, contact_recived_message, prepare_broadcast_message, send_broadcast, send_rich_media_with_links, conversation_started_message, \
     send_contact_keyboard, send_contacts, send_location, settings_message, send_change_phone_number, send_my_order_message, send_order_history
@@ -112,6 +113,13 @@ def incoming():
                 return Response(status=200)
 
             broadcast = prepare_broadcast_message(viber_request, viber, message.media, message.text) 
+
+        if isinstance(viber_request, ViberUnsubscribedRequest):
+            user_id = viber_request.user_id
+            print(f"User {user_id} has unsubscribed from the bot.")
+            phone_number = get_number_from_user_id(user_id)
+            delete_user_from_messenger(phone_number)
+
 
     # First message from bot
     if isinstance(viber_request, ViberConversationStartedRequest):
