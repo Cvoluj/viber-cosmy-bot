@@ -6,7 +6,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko
 
 def login():
     data = {
-        'username': (None, "Telegram"),
+        'username': (None, "Viber"),
         'key': (None, settings.cosmy_api_key),
     }
     try:
@@ -39,7 +39,7 @@ def synchronize_users(api_token):
         user_id, phone = user
         data = {
             'telephone': phone,
-            'telegram_id': user_id
+            'viber_id': user_id
         }
         response = requests.post(api_url, data=data, headers=headers)
         if response.status_code == 200:
