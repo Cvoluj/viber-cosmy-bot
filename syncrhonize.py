@@ -6,7 +6,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko
 
 def login():
     data = {
-        'username': (None, "Viber"),
+        'username': (None, "Telegram"),
         'key': (None, settings.cosmy_api_key),
     }
     try:
@@ -33,7 +33,7 @@ def synchronize_users(api_token):
     cursor.execute("SELECT user_id, number FROM user")
     users = cursor.fetchall()
 
-    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateTelegram&api_token={api_token}"
+    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={api_token}"
 
     for user in users:
         user_id, phone = user

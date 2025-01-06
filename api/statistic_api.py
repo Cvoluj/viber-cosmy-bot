@@ -10,7 +10,7 @@ headers = {
 
 
 def synchronize_user(user_id, phone):
-    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateTelegram&api_token={settings.api_token}"
+    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={settings.api_token}"
     data = {
             'telephone': phone,
             'viber_id': user_id
