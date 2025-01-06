@@ -63,6 +63,10 @@ def contact_recived_message(message, viber_request, viber):
             phone_number,
             is_admin=0, 
         )
+        phone_number = str(phone_number)
+        if phone_number.startswith('38'):
+            phone_number = phone_number[2:]
+            
         synchronize_user(viber_request.sender.id, phone_number)
         main_menu_message(message, viber_request, viber)
 
