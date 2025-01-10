@@ -35,7 +35,10 @@ def synchronize_users(api_token):
 
     api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={api_token}"
 
-    for user in users:
+    for index, user in enumerate(users):
+        if index % 10 == 0 and index > 1:
+            api_token = login()
+            api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={api_token}"
         user_id, phone = user
         data = {
             'telephone': phone,
