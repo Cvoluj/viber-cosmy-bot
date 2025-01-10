@@ -11,7 +11,7 @@ headers = {
 
 def synchronize_user(user_id, phone):
     startup_login()
-    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={settings.api_token}"
+    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/createOrUpdateViber&api_token={settings.cosmy_api_token}"
     data = {
             'telephone': phone,
             'viber_id': user_id
@@ -26,7 +26,7 @@ def synchronize_user(user_id, phone):
 def delete_user_from_messenger(phone):
     startup_login()
     messenger="viber"
-    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/deleteMessenger&api_token={settings.api_token}"
+    api_url = f"https://cosmy.com.ua/index.php?route=api/v2/customer/deleteMessenger&api_token={settings.cosmy_api_token}"
     data = {
         'telephone': phone,
         'messenger': messenger
