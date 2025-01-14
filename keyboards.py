@@ -93,7 +93,7 @@ main_keyboard = {
             "BgColor": MILKY_COLOR, 
             "ActionType": "open-url",
             "ActionBody": "viber://chat?number=+380733175443",
-            "Text": format_text_with_color("💪 Консультація"),
+            "Text": format_text_with_color("✍🏻 Консультація"),
             "TextSize": "large",
             "TextHAlign": "center",
             "TextVAlign": "middle",
